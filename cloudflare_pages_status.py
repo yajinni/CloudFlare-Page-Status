@@ -314,7 +314,11 @@ class SettingsGUI:
             
             if result.returncode == 0:
                 projects_data = json.loads(result.stdout)
-                self.projects_list = [p.get('name') for p in projects_data if p.get('name')]
+                self.projects_list = [
+                    p.get('name') or p.get('Project Name') 
+                    for p in projects_data 
+                    if (p.get('name') or p.get('Project Name'))
+                ]
             else:
                 self.projects_list = []
         except Exception:
@@ -471,31 +475,34 @@ class CloudflarePagesStatusApp:
                 data = json.loads(result.stdout)
                 if isinstance(data, list) and len(data) > 0:
                     latest = data[0]
-                    deploy_id = latest.get('id')
-                    raw_status = latest.get('status', 'success')
+                    deploy_id = latest.get('id') or latest.get('Id')
+                    raw_status = str(latest.get('status') or latest.get('Status') or 'success').lower()
                     
                     commit_hash = "Unknown"
                     if 'commit_hash' in latest:
                         commit_hash = latest['commit_hash'][:7]
                     elif 'short_hash' in latest:
                         commit_hash = latest['short_hash']
+                    elif 'Source' in latest:
+                        commit_hash = latest['Source']
                         
-                    url = latest.get('url', fallback_url)
+                    url = latest.get('url') or latest.get('Deployment') or fallback_url
                     
                     status = 'online'
-                    stages = latest.get('stages', [])
+                    stages = latest.get('stages', []) or latest.get('Stages', [])
                     
                     is_building = False
                     for stage in stages:
-                        if stage.get('status') == 'active':
+                        stage_status = str(stage.get('status') or stage.get('Status') or '').lower()
+                        if stage_status == 'active' or stage_status == 'in_progress':
                             is_building = True
                             break
                             
-                    if is_building or raw_status == 'in_progress':
+                    if is_building or raw_status == 'in_progress' or 'building' in raw_status or 'progress' in raw_status:
                         status = 'building'
-                    elif raw_status == 'failed':
+                    elif 'fail' in raw_status:
                         status = 'failed'
-                    elif raw_status in ['success', 'active', 'idle']:
+                    elif raw_status in ['success', 'active', 'idle'] or 'ago' in raw_status:
                         status = 'online'
                         
                     return deploy_id, status, commit_hash, url
