@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller compilation directories
+build/
+dist/
+*.spec
+
+# Environments
+.venv/
+venv/
+ENV/
+
+# Local configuration files
+.cloudflare_pages_status.json
