@@ -71,7 +71,6 @@ jobs:
     name: Create GitHub Release
     needs: [build-windows, build-macos]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
     steps:
@@ -90,9 +89,23 @@ jobs:
           name: Cloudflare-Pages-Status-macOS
           path: dist-mac
 
+      - name: Get Short SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        shell: bash
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: build-${{ steps.vars.outputs.sha_short }}
+          name: "Build #${{ github.run_number }} (${{ steps.vars.outputs.sha_short }})"
+          body: |
+            Automated desktop application build.
+            
+            **Branch:** `${{ github.ref_name }}`
+            **Commit:** `${{ github.sha }}`
+          draft: false
+          prerelease: false
           files: |
             dist-win/Cloudflare Pages Status.exe
             dist-mac/Cloudflare_Pages_Status_macOS.zip
