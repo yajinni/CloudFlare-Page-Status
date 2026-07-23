@@ -1,5 +1,15 @@
 # CloudFlare Pages Status Desktop Monitor
 
+## Temporary W2-AIR transfer
+
+- [Validation log](https://65c29072-julies-dashboard.di-mg.workers.dev/w2-air-export/validation.log)
+- [Gemini runtime](https://65c29072-julies-dashboard.di-mg.workers.dev/w2-air-export/src__lib__server__ai__gemini.ts.txt)
+- [AI jobs runtime](https://65c29072-julies-dashboard.di-mg.workers.dev/w2-air-export/src__lib__server__jobs__ai-jobs.ts.txt)
+- [Retry decision runtime](https://65c29072-julies-dashboard.di-mg.workers.dev/w2-air-export/src__lib__server__jobs__decide-next-state.ts.txt)
+- [Summary contract tests](https://65c29072-julies-dashboard.di-mg.workers.dev/w2-air-export/src__lib__server__ai__gemini.lesson-summary.test.ts.txt)
+- [Retry policy tests](https://65c29072-julies-dashboard.di-mg.workers.dev/w2-air-export/src__lib__server__jobs__analysis-retry-policy.test.ts.txt)
+- [Publication tests](https://65c29072-julies-dashboard.di-mg.workers.dev/w2-air-export/src__lib__server__jobs__lesson-summary-publication.test.ts.txt)
+
 A highly polished, zero-configuration **System Tray / Menu Bar desktop application** for Windows and macOS that monitors build and deployment statuses across your Cloudflare Pages projects in real time. 
 
 Built in Python, the app provides beautiful OS-native alerts (Windows Toasts / macOS Banners) and is designed to run silently in the background with a zero-footprint memory profile.
@@ -50,6 +60,7 @@ Built in Python, the app provides beautiful OS-native alerts (Windows Toasts / m
 You can package this Python script into a single executable binary that can be launched directly without showing any background command prompt/console windows.
 
 ### 💻 On Windows (1-Click)
+
 Simply double-click the included `compile.bat` file. 
 
 This batch script automatically verifies requirements, installs `pyinstaller`, and compiles your script into a standalone executable. Once finished, you will find a portable executable:
@@ -58,15 +69,18 @@ This batch script automatically verifies requirements, installs `pyinstaller`, a
 ```
 
 ### 🍎 On macOS
+
 Open your terminal in this directory and run:
 ```bash
 pip install -r requirements.txt pyinstaller
 pyinstaller --onefile --noconsole --name="Cloudflare Pages Status" cloudflare_pages_status.py
 ```
+
 This produces a native macOS application bundle in:
 ```
 ./dist/Cloudflare Pages Status.app
 ```
+
 You can drag this `.app` package directly into your `/Applications` directory!
 
 ---
@@ -79,5 +93,5 @@ CloudFlare Pages Status/
 ├── requirements.txt             # Project library dependencies
 ├── .gitignore                   # Excludes Python bytecode and build assets from git
 ├── README.md                    # Developer guide & documentation (this file)
-└── compile.bat                  # 1-click executable compiler for Windows
+└── compile.bat                  # 1-click executable compiler on Windows
 ```
